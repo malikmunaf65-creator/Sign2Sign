@@ -2,10 +2,9 @@
 
 Real-time hand gesture recognition using deep learning and computer vision.
 
-![Python](...)
-![TensorFlow](...)
-![OpenCV](...)
-
+![Python](https://img.shields.io/badge/Python-3.x-blue)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-DeepLearning-orange)
+![OpenCV](https://img.shields.io/badge/OpenCV-ComputerVision-green)
 ## 📸 Demo
 (images here)
 <p align="center">
