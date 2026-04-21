@@ -1,4 +1,13 @@
+# ✋ Sign2Sign – Gesture Recognition System
+
+Real-time hand gesture recognition using deep learning and computer vision.
+
+![Python](...)
+![TensorFlow](...)
+![OpenCV](...)
+
 ## 📸 Demo
+(images here)
 <p align="center">
   <img src="peace.jpeg" width="250"/>
   <img src="rock.jpeg" width="250"/>
