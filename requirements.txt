@@ -2,5 +2,5 @@ flask
 numpy
 opencv-python-headless
 mediapipe
-tensorflow
+tensorflow-cpu==2.13.0
 gunicorn
