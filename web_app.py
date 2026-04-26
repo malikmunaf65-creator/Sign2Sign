@@ -6,7 +6,7 @@ import tensorflow as tf
 app = Flask(__name__)
 
 # Load model
-model = tf.keras.models.load_model("gesture_model.keras")
+model = tf.keras.models.load_model("gesture_model.keras", compile=False)
 labels = list(np.load("label_map.npy", allow_pickle=True))
 
 
