@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, render_template, request, jsonify
 import numpy as np
 import cv2
 import tensorflow as tf
@@ -10,41 +10,40 @@ model = tf.keras.models.load_model("gesture_model.keras")
 labels = list(np.load("label_map.npy", allow_pickle=True))
 
 
-def preprocess_image(image):
-    image = cv2.resize(image, (64, 64))
-    image = image / 255.0
-    return np.expand_dims(image, axis=0)
+def preprocess(frame):
+    roi = cv2.resize(frame, (64, 64)) / 255.0
+    return np.expand_dims(roi, axis=0)
 
 
-@app.route("/", methods=["GET", "POST"])
-def index():
-    prediction = None
-    confidence = None
+@app.route("/")
+def home():
+    return render_template("index.html")
 
-    if request.method == "POST":
-        file = request.files["file"]
-        if file:
-            img = cv2.imdecode(
-                np.frombuffer(file.read(), np.uint8),
-                cv2.IMREAD_COLOR
-            )
 
-            processed = preprocess_image(img)
-            preds = model.predict(processed)[0]
+@app.route("/predict", methods=["POST"])
+def predict():
+    file = request.files["file"]
 
-            pred_class = np.argmax(preds)
-            confidence = float(np.max(preds))
+    if not file:
+        return jsonify({"error": "No file"})
 
-            if pred_class < len(labels):
-                prediction = labels[pred_class]
-            else:
-                prediction = "Unknown"
+    img = cv2.imdecode(
+        np.frombuffer(file.read(), np.uint8),
+        cv2.IMREAD_COLOR
+    )
 
-            confidence = f"{confidence*100:.2f}%"
+    processed = preprocess(img)
+    preds = model.predict(processed)[0]
 
-    return render_template("index.html",
-                           prediction=prediction,
-                           confidence=confidence)
+    pred_class = int(np.argmax(preds))
+    confidence = float(np.max(preds))
+
+    gesture = labels[pred_class] if pred_class < len(labels) else "Unknown"
+
+    return jsonify({
+        "gesture": gesture,
+        "confidence": round(confidence * 100, 2)
+    })
 
 
 if __name__ == "__main__":
