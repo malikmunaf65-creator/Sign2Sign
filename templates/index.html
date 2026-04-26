@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SIGN·2·SIGN</title>
+
+    <style>
+        body {
+            margin: 0;
+            background: radial-gradient(circle at center, #02110c, #000);
+            font-family: Arial;
+            color: #00e5a0;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 20px;
+            letter-spacing: 3px;
+        }
+
+        .container {
+            margin-top: 40px;
+        }
+
+        .card {
+            width: 320px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 16px;
+            background: rgba(0, 229, 160, 0.05);
+            border: 1px solid rgba(0, 229, 160, 0.2);
+            box-shadow: 0 0 20px rgba(0, 229, 160, 0.1);
+        }
+
+        .upload-box {
+            border: 2px dashed #00e5a0;
+            padding: 40px;
+            border-radius: 12px;
+        }
+
+        input {
+            color: white;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #00e5a0;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .result {
+            font-size: 32px;
+            margin-top: 10px;
+            color: #00ffb3;
+        }
+
+        .confidence {
+            font-size: 18px;
+            color: #ffaa00;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>SIGN·2·SIGN</h1>
+
+<div class="container">
+
+    <div class="card">
+        <div class="upload-box">
+            <input type="file" id="fileInput">
+        </div>
+        <button onclick="predict()">PREDICT</button>
+    </div>
+
+    <div class="card" id="resultCard" style="display:none;">
+        <div>DETECTED GESTURE</div>
+        <div class="result" id="gestureText">---</div>
+        <div class="confidence" id="confidenceText">---</div>
+    </div>
+
+</div>
+
+<script>
+function predict() {
+    const fileInput = document.getElementById("fileInput");
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert("Upload an image first");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    fetch("/predict", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("resultCard").style.display = "block";
+        document.getElementById("gestureText").innerText = data.gesture;
+        document.getElementById("confidenceText").innerText = "Confidence: " + data.confidence + "%";
+    });
+}
+</script>
+
+</body>
+</html>
