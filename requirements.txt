@@ -1,5 +1,8 @@
-flask
-numpy
+fastapi
+uvicorn[standard]
+python-multipart
+websockets
+tensorflow==2.13.0
+numpy==1.24.3
 opencv-python-headless
-tensorflow-cpu==2.12.0
-gunicorn
+Pillow
